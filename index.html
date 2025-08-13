@@ -2,189 +2,189 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clone Abduzeedo - Menu e Galeria</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clone Abduzeedo - Menu e Galeria</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    body {
-      font-family: sans-serif;
-    }
+    body {
+      font-family: sans-serif;
+    }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      background: #111;
-      color: #fff;
-    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: #111;
+      color: #fff;
+    }
 
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-    .open-menu {
-      font-size: 20px;
-      padding: 8px 16px;
-      background: none;
-      border: 2px solid white;
-      border-radius: 6px;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.5s ease;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      position: fixed;
-      top: 20px;
-      right: 30px;
-      z-index: 1001;
-    }
+    .open-menu {
+      font-size: 20px;
+      padding: 8px 16px;
+      background: none;
+      border: 2px solid white;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.5s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      z-index: 1001;
+    }
 
-    .open-menu .label {
-      display: inline-block;
-      transition: transform 0.5s ease;
-    }
+    .open-menu .label {
+      display: inline-block;
+      transition: transform 0.5s ease;
+    }
 
-    .open-menu.rotated {
-      transform: rotate(180deg);
-    }
+    .open-menu.rotated {
+      transform: rotate(180deg);
+    }
 
-    .open-menu.rotated .label {
-      transform: rotate(-180deg);
-    }
+    .open-menu.rotated .label {
+      transform: rotate(-180deg);
+    }
 
-    /* MENU LATERAL */
-    .side-menu {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
-      color: #fff;
-      padding: 60px 30px 30px 30px;
-      transform: translateX(100%);
-      transition: transform 0.4s ease;
-      z-index: 1000;
-    }
+    /* MENU LATERAL */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      color: #fff;
+      padding: 60px 30px 30px 30px;
+      transform: translateX(100%);
+      transition: transform 0.4s ease;
+      z-index: 1000;
+    }
 
-    .side-menu.open {
-      transform: translateX(0);
-    }
+    .side-menu.open {
+      transform: translateX(0);
+    }
 
-    .close-menu {
-      display: none; /* desativado, pois usamos o mesmo botão */
-    }
+    .close-menu {
+      display: none; /* desativado, pois usamos o mesmo botão */
+    }
 
-    .side-menu nav {
-      margin-top: 60px;
-    }
+    .side-menu nav {
+      margin-top: 60px;
+    }
 
-    .side-menu ul {
-      list-style: none;
-    }
+    .side-menu ul {
+      list-style: none;
+    }
 
-    .side-menu li {
-      margin-bottom: 25px;
-    }
+    .side-menu li {
+      margin-bottom: 25px;
+    }
 
-    .side-menu a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 24px;
-      transition: color 0.2s ease;
-    }
+    .side-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 24px;
+      transition: color 0.2s ease;
+    }
 
-    .side-menu a:hover {
-      color: #0ff;
-    }
+    .side-menu a:hover {
+      color: #0ff;
+    }
 
-    main {
-      padding: 40px;
-    }
+    main {
+      padding: 40px;
+    }
 
-    .gallery {
-      margin-top: 40px;
-    }
+    .gallery {
+      margin-top: 40px;
+    }
 
-    .gallery img {
-      width: 100%;
-      height: auto;
-      display: block;
-      margin-bottom: 20px;
-      border-radius: 8px;
-    }
-  </style>
+    .gallery img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- TOPO -->
-  <header>
-    <div class="logo">walker design</div>
-    <!-- Botão menu fixo no topo -->
-    <button class="open-menu" id="menuToggle">
-      <span class="label">Menu</span>
-    </button>
-  </header>
+  <!-- TOPO -->
+  <header>
+    <div class="logo">walker design</div>
+    <!-- Botão menu fixo no topo -->
+    <button class="open-menu" id="menuToggle">
+      <span class="label">Menu</span>
+    </button>
+  </header>
 
-  <!-- MENU LATERAL -->
-  <aside class="side-menu" id="sideMenu">
-    <nav>
-      <ul>
-        <li><a href="#">Inspiração</a></li>
-        <li><a href="#">Design Gráfico</a></li>
-        <li><a href="#">UI/UX</a></li>
-        <li><a href="#">Tipografia</a></li>
-      </ul>
-    </nav>
-  </aside>
+  <!-- MENU LATERAL -->
+  <aside class="side-menu" id="sideMenu">
+    <nav>
+      <ul>
+        <li><a href="#">Inspiração</a></li>
+        <li><a href="#">Design Gráfico</a></li>
+        <li><a href="#">UI/UX</a></li>
+        <li><a href="#">Tipografia</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main>
-    <h1>Bem-vindo ao clone do Abduzeedo</h1>
-    <p>Clique no menu para abrir a navegação ocupando toda a tela.</p>
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <h1>Bem-vindo ao clone do Abduzeedo</h1>
+    <p>Clique no menu para abrir a navegação ocupando toda a tela.</p>
 
-    <section class="gallery">
-      <img src="https://picsum.photos/1200/500?random=1" alt="Imagem 1">
-      <img src="https://picsum.photos/1200/500?random=2" alt="Imagem 2">
-      <img src="https://picsum.photos/1200/500?random=3" alt="Imagem 3">
-      <img src="https://picsum.photos/1200/500?random=4" alt="Imagem 4">
-      <img src="https://picsum.photos/1200/500?random=5" alt="Imagem 5">
-      <img src="https://picsum.photos/1200/500?random=6" alt="Imagem 6">
-      <img src="https://picsum.photos/1200/500?random=7" alt="Imagem 7">
-      <img src="https://picsum.photos/1200/500?random=8" alt="Imagem 8">
-      <img src="https://picsum.photos/1200/500?random=9" alt="Imagem 9">
-      <img src="https://picsum.photos/1200/500?random=10" alt="Imagem 10">
-    </section>
-  </main>
+    <section class="gallery">
+      <img src="https://picsum.photos/1200/500?random=1" alt="Imagem 1">
+      <img src="https://picsum.photos/1200/500?random=2" alt="Imagem 2">
+      <img src="https://picsum.photos/1200/500?random=3" alt="Imagem 3">
+      <img src="https://picsum.photos/1200/500?random=4" alt="Imagem 4">
+      <img src="https://picsum.photos/1200/500?random=5" alt="Imagem 5">
+      <img src="https://picsum.photos/1200/500?random=6" alt="Imagem 6">
+      <img src="https://picsum.photos/1200/500?random=7" alt="Imagem 7">
+      <img src="https://picsum.photos/1200/500?random=8" alt="Imagem 8">
+      <img src="https://picsum.photos/1200/500?random=9" alt="Imagem 9">
+      <img src="https://picsum.photos/1200/500?random=10" alt="Imagem 10">
+    </section>
+  </main>
 
-  <!-- JS PARA MENU -->
-  <script>
-    const menu = document.getElementById("sideMenu");
-    const menuToggle = document.getElementById("menuToggle");
-    const label = menuToggle.querySelector(".label");
+  <!-- JS PARA MENU -->
+  <script>
+    const menu = document.getElementById("sideMenu");
+    const menuToggle = document.getElementById("menuToggle");
+    const label = menuToggle.querySelector(".label");
 
-    menuToggle.addEventListener("click", () => {
-      const isOpen = menu.classList.contains("open");
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menu.classList.contains("open");
 
-      if (isOpen) {
-        menu.classList.remove("open");
-        menuToggle.classList.remove("rotated");
-        label.textContent = "Menu";
-      } else {
-        menu.classList.add("open");
-        menuToggle.classList.add("rotated");
-        label.textContent = "X Close";
-      }
-    });
-  </script>
+      if (isOpen) {
+        menu.classList.remove("open");
+        menuToggle.classList.remove("rotated");
+        label.textContent = "Menu";
+      } else {
+        menu.classList.add("open");
+        menuToggle.classList.add("rotated");
+        label.textContent = "X Close";
+      }
+    });
+  </script>
 
 </body>
 </html>
