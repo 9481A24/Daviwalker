@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clone Abduzeedo - Menu e Galeria</title>
+  <title>Layout Fixo com Menu</title>
   <style>
     * {
       margin: 0;
@@ -12,17 +11,29 @@
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
+      height: 100%;
+      overflow: hidden; /* impede rolagem global */
       font-family: sans-serif;
     }
 
+    body.menu-open {
+      overflow: hidden;
+    }
+
     header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: #111;
+      color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px;
-      background: #111;
-      color: #fff;
+      padding: 0 20px;
+      z-index: 1001;
     }
 
     .logo {
@@ -31,8 +42,8 @@
     }
 
     .open-menu {
-      font-size: 20px;
-      padding: 8px 16px;
+      font-size: 16px;
+      padding: 6px 12px;
       background: none;
       border: 2px solid white;
       border-radius: 6px;
@@ -40,11 +51,7 @@
       cursor: pointer;
       transition: transform 0.5s ease;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      position: fixed;
-      top: 20px;
-      right: 30px;
-      z-index: 1001;
+      letter-spacing: 1px;
     }
 
     .open-menu .label {
@@ -60,16 +67,15 @@
       transform: rotate(-180deg);
     }
 
-    /* MENU LATERAL */
     .side-menu {
       position: fixed;
       top: 0;
       right: 0;
       width: 100%;
-      height: 100vh;
+      height: 100%;
       background: rgba(0, 0, 0, 0.95);
       color: #fff;
-      padding: 60px 30px 30px 30px;
+      padding: 80px 30px 30px 30px;
       transform: translateX(100%);
       transition: transform 0.4s ease;
       z-index: 1000;
@@ -79,12 +85,8 @@
       transform: translateX(0);
     }
 
-    .close-menu {
-      display: none; /* desativado, pois usamos o mesmo botão */
-    }
-
     .side-menu nav {
-      margin-top: 60px;
+      margin-top: 40px;
     }
 
     .side-menu ul {
@@ -107,28 +109,34 @@
     }
 
     main {
-      padding: 40px;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 60px);
+      overflow-y: auto;
+      padding: 20px;
+      background: #f5f5f5;
     }
 
     .gallery {
-      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
     .gallery img {
       width: 100%;
       height: auto;
-      display: block;
-      margin-bottom: 20px;
       border-radius: 8px;
     }
   </style>
 </head>
 <body>
 
-  <!-- TOPO -->
+  <!-- HEADER -->
   <header>
     <div class="logo">walker design</div>
-    <!-- Botão menu fixo no topo -->
     <button class="open-menu" id="menuToggle">
       <span class="label">Menu</span>
     </button>
@@ -158,14 +166,10 @@
       <img src="https://picsum.photos/1200/500?random=4" alt="Imagem 4">
       <img src="https://picsum.photos/1200/500?random=5" alt="Imagem 5">
       <img src="https://picsum.photos/1200/500?random=6" alt="Imagem 6">
-      <img src="https://picsum.photos/1200/500?random=7" alt="Imagem 7">
-      <img src="https://picsum.photos/1200/500?random=8" alt="Imagem 8">
-      <img src="https://picsum.photos/1200/500?random=9" alt="Imagem 9">
-      <img src="https://picsum.photos/1200/500?random=10" alt="Imagem 10">
     </section>
   </main>
 
-  <!-- JS PARA MENU -->
+  <!-- SCRIPT -->
   <script>
     const menu = document.getElementById("sideMenu");
     const menuToggle = document.getElementById("menuToggle");
@@ -178,13 +182,16 @@
         menu.classList.remove("open");
         menuToggle.classList.remove("rotated");
         label.textContent = "Menu";
+        document.body.classList.remove("menu-open");
       } else {
         menu.classList.add("open");
         menuToggle.classList.add("rotated");
         label.textContent = "X Close";
+        document.body.classList.add("menu-open");
       }
     });
   </script>
 
 </body>
 </html>
+
