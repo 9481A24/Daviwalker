@@ -2,45 +2,112 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Etiqueta Biofertilizante</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .etiqueta {
-      width: 300px;
-      height: 200px;
-      border: 2px solid #4CAF50;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-    .titulo {
-      text-align: center;
-      font-weight: bold;
-      color: #2E7D32;
-    }
-    .campo {
-      margin: 5px 0;
-    }
-    .qr {
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Gerador de Etiqueta Biofertilizante</title>
+<style>
+  body { font-family: monospace; margin: 20px; background: #f4f4f4; }
+  .etiqueta-box {
+    border: 2px solid #4CAF50;
+    padding: 15px;
+    width: 400px;
+    white-space: pre-wrap;
+    background: #fff;
+    margin-top: 20px;
+  }
+  button { padding: 10px 20px; margin-top: 10px; margin-right: 10px; }
+  input, textarea { width: 100%; margin-bottom: 10px; }
+  .qr-container { text-align: center; margin-top: 10px; }
+</style>
 </head>
 <body>
-  <div class="etiqueta">
-    <div class="titulo">BIOFERTILIZANTE ORGÂNICO</div>
-    <div class="campo">Nº do Lote: 00123</div>
-    <div class="campo">Data de Produção: 05/09/2025</div>
-    <div class="campo">Volume: 1 L</div>
-    <div class="campo">Ingredientes: Água de arroz fermentada, Leite pasteurizado, Açúcar mascavo</div>
-    <div class="campo">Fabricante: Fábrica Verde Ltda.</div>
-    <div class="campo">Contato: (31) 99999-9999</div>
-    <div class="campo">Selo Orgânico MAPA</div>
-    <div class="qr">[QR Code]</div>
-  </div>
+
+<h2>Gerador de Etiqueta</h2>
+
+<form id="formEtiqueta">
+  <label>Nº do Lote:</label>
+  <input type="text" id="lote" required>
+  
+  <label>Data de Produção:</label>
+  <input type="date" id="data" required>
+  
+  <label>Volume (L):</label>
+  <input type="number" id="volume" required>
+  
+  <label>Ingredientes:</label>
+  <textarea id="ingredientes" rows="3">Água de arroz fermentada, leite pasteurizado, açúcar mascavo</textarea>
+  
+  <label>Fabricante:</label>
+  <input type="text" id="fabricante" value="Fábrica Verde Ltda." required>
+  
+  <label>Contato:</label>
+  <input type="text" id="contato" value="(31) 99999-9999" required>
+  
+  <label>Site:</label>
+  <input type="text" id="site" value="www.fabricaverde.com.br" required>
+  
+  <label>Link para rastreabilidade:</label>
+  <input type="text" id="linkRastreio" value="https://sua-planilha-ou-pagina.com/lote001" required>
+  
+  <button type="button" onclick="gerarEtiqueta()">Gerar Etiqueta</button>
+  <button type="button" onclick="imprimirEtiqueta()">Imprimir Etiqueta</button>
+</form>
+
+<div id="etiquetaGerada"></div>
+
+<script>
+function gerarEtiqueta() {
+  const lote = document.getElementById('lote').value;
+  const data = document.getElementById('data').value;
+  const volume = document.getElementById('volume').value;
+  const ingredientes = document.getElementById('ingredientes').value;
+  const fabricante = document.getElementById('fabricante').value;
+  const contato = document.getElementById('contato').value;
+  const site = document.getElementById('site').value;
+  const linkRastreio = encodeURIComponent(document.getElementById('linkRastreio').value);
+
+  const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${linkRastreio}`;
+
+  const etiqueta = `
+┌─────────────────────────────────────────────┐
+│           BIOFERTILIZANTE ORGÂNICO         │
+│                                             │
+│ Nº do Lote: ${lote.padEnd(35)}│
+│ Data de Produção: ${data.padEnd(25)}│
+│ Volume: ${volume} L${' '.repeat(32 - volume.toString().length)}│
+│                                             │
+│ Ingredientes: ${ingredientes.padEnd(30)}│
+│                                             │
+│ Fabricante: ${fabricante.padEnd(32)}│
+│ Contato: ${contato.padEnd(34)}│
+│ Site: ${site.padEnd(32)}│
+│                                             │
+│ Selo Orgânico MAPA                          │
+│                                             │
+│ [QR Code abaixo]                             │
+│                                             │
+│ Instruções: Diluir 1:10 no solo ou foliar. │
+│ Armazenar em local fresco e protegido do   │
+│ sol.                                        │
+└─────────────────────────────────────────────┘
+<div class="qr-container">
+  <img src="${qrURL}" alt="QR Code">
+</div>
+  `;
+
+  document.getElementById('etiquetaGerada').innerHTML = `<pre class="etiqueta-box" id="etiquetaParaImprimir">${etiqueta}</pre>`;
+}
+
+function imprimirEtiqueta() {
+  const conteudo = document.getElementById('etiquetaParaImprimir').innerHTML;
+  const janela = window.open('', '', 'width=500,height=700');
+  janela.document.write('<html><head><title>Imprimir Etiqueta</title></head><body>');
+  janela.document.write(conteudo);
+  janela.document.write('</body></html>');
+  janela.document.close();
+  janela.print();
+}
+</script>
+
 </body>
 </html>
 
