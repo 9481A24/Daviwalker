@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,65 +8,96 @@
   .etiqueta-box {
     border: 2px solid #4CAF50;
     padding: 15px;
-    width: 400px;
     white-space: pre-wrap;
     background: #fff;
     margin-top: 20px;
   }
   button { padding: 10px 20px; margin-top: 10px; margin-right: 10px; }
-  input, textarea { width: 100%; margin-bottom: 10px; }
+  input, textarea, select { width: 100%; margin-bottom: 10px; }
   .qr-container { text-align: center; margin-top: 10px; }
 </style>
 </head>
 <body>
 
-<h2>Gerador de Etiqueta</h2>
+<h2>Gerador de Etiquetas Biofertilizante</h2>
 
 <form id="formEtiqueta">
-  <label>Nº do Lote:</label>
-  <input type="text" id="lote" required>
-  
   <label>Data de Produção:</label>
   <input type="date" id="data" required>
-  
-  <label>Volume (L):</label>
-  <input type="number" id="volume" required>
-  
-  <label>Ingredientes:</label>
-  <textarea id="ingredientes" rows="3">Água de arroz fermentada, leite pasteurizado, açúcar mascavo</textarea>
-  
+
+  <label>Volume:</label>
+  <select id="volume" required>
+    <option value="1">1 Litro</option>
+    <option value="20">20 Litros</option>
+    <option value="50">50 Litros</option>
+    <option value="500">500 Litros</option>
+  </select>
+
+  <label>Quantidade de recipientes (para gerar múltiplos lotes):</label>
+  <input type="number" id="quantidade" value="1" min="1" required>
+
   <label>Fabricante:</label>
   <input type="text" id="fabricante" value="Fábrica Verde Ltda." required>
-  
+
   <label>Contato:</label>
   <input type="text" id="contato" value="(31) 99999-9999" required>
-  
+
   <label>Site:</label>
   <input type="text" id="site" value="www.fabricaverde.com.br" required>
-  
-  <label>Link para rastreabilidade:</label>
-  <input type="text" id="linkRastreio" value="https://sua-planilha-ou-pagina.com/lote001" required>
-  
-  <button type="button" onclick="gerarEtiqueta()">Gerar Etiqueta</button>
-  <button type="button" onclick="imprimirEtiqueta()">Imprimir Etiqueta</button>
+
+  <button type="button" onclick="gerarEtiquetas()">Gerar Etiquetas</button>
+  <button type="button" onclick="imprimirEtiquetas()">Imprimir Etiquetas</button>
 </form>
 
-<div id="etiquetaGerada"></div>
+<div id="etiquetasGeradas"></div>
 
 <script>
-function gerarEtiqueta() {
-  const lote = document.getElementById('lote').value;
+// Armazena lotes por mês
+let lotes = JSON.parse(localStorage.getItem('lotes')) || {};
+
+// Função para gerar número de lote automático no formato B-YYMM-001
+function gerarNumeroLote() {
+  const hoje = new Date();
+  const ano = hoje.getFullYear().toString().slice(-2); // YY
+  const mes = (hoje.getMonth() + 1).toString().padStart(2, '0'); // MM
+  const chaveMes = `${ano}${mes}`;
+  
+  if (!lotes[chaveMes]) {
+    lotes[chaveMes] = 0;
+  }
+  lotes[chaveMes]++;
+  localStorage.setItem('lotes', JSON.stringify(lotes));
+  
+  const seq = lotes[chaveMes].toString().padStart(3, '0');
+  return `B-${chaveMes}-${seq}`;
+}
+
+function gerarEtiquetas() {
   const data = document.getElementById('data').value;
-  const volume = document.getElementById('volume').value;
-  const ingredientes = document.getElementById('ingredientes').value;
+  const quantidade = parseInt(document.getElementById('quantidade').value);
   const fabricante = document.getElementById('fabricante').value;
   const contato = document.getElementById('contato').value;
   const site = document.getElementById('site').value;
-  const linkRastreio = encodeURIComponent(document.getElementById('linkRastreio').value);
+  const volume = parseInt(document.getElementById('volume').value);
+  const ingredientes = "Água de arroz fermentada, leite pasteurizado, açúcar mascavo";
 
-  const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${linkRastreio}`;
+  const etiquetasDiv = document.getElementById('etiquetasGeradas');
+  etiquetasDiv.innerHTML = ""; // limpa etiquetas anteriores
 
-  const etiqueta = `
+  // Ajuste de tamanho conforme volume
+  let largura = '400px', altura = '450px';
+  switch(volume){
+    case 1: largura='200px'; altura='250px'; break;
+    case 20: largura='300px'; altura='350px'; break;
+    case 50: largura='400px'; altura='450px'; break;
+    case 500: largura='600px'; altura='700px'; break;
+  }
+
+  for(let i=0; i<quantidade; i++){
+    const lote = gerarNumeroLote();
+    const qrURL = `https://sua-planilha-ou-pagina.com/${lote}`;
+
+    const etiqueta = `
 ┌─────────────────────────────────────────────┐
 │           BIOFERTILIZANTE ORGÂNICO         │
 │                                             │
@@ -90,17 +120,23 @@ function gerarEtiqueta() {
 │ sol.                                        │
 └─────────────────────────────────────────────┘
 <div class="qr-container">
-  <img src="${qrURL}" alt="QR Code">
+  <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrURL)}" alt="QR Code">
 </div>
-  `;
+    `;
 
-  document.getElementById('etiquetaGerada').innerHTML = `<pre class="etiqueta-box" id="etiquetaParaImprimir">${etiqueta}</pre>`;
+    const etiquetaBox = document.createElement('div');
+    etiquetaBox.className = "etiqueta-box";
+    etiquetaBox.style.width = largura;
+    etiquetaBox.style.height = altura;
+    etiquetaBox.innerHTML = etiqueta;
+    etiquetasDiv.appendChild(etiquetaBox);
+  }
 }
 
-function imprimirEtiqueta() {
-  const conteudo = document.getElementById('etiquetaParaImprimir').innerHTML;
-  const janela = window.open('', '', 'width=500,height=700');
-  janela.document.write('<html><head><title>Imprimir Etiqueta</title></head><body>');
+function imprimirEtiquetas() {
+  const conteudo = document.getElementById('etiquetasGeradas').innerHTML;
+  const janela = window.open('', '', 'width=900,height=1000');
+  janela.document.write('<html><head><title>Imprimir Etiquetas</title></head><body>');
   janela.document.write(conteudo);
   janela.document.write('</body></html>');
   janela.document.close();
@@ -110,4 +146,5 @@ function imprimirEtiqueta() {
 
 </body>
 </html>
+
 
